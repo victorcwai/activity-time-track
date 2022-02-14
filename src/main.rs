@@ -40,9 +40,9 @@ fn main() -> Result<()> {
             let p_last_input_info = &mut last_input_info as *mut LASTINPUTINFO;
             let res = GetLastInputInfo(p_last_input_info);
             if res.as_bool() {
-                let sec = (GetTickCount() - last_input_info.dwTime)/1000;
-                if sec > 0 && sec % 300 == 0 {
-                    println!("{}: Idle (i.e. no mouse/keyboard activities) for: {} minutes\n", Utc::now().to_rfc2822(), sec/60);
+                let idle_min = ((GetTickCount() - last_input_info.dwTime)/1000)/60;                
+                if idle_min >= 5 && idle_min % 5 == 0 {
+                    println!("{}: Idle (i.e. no mouse/keyboard activities) for: {} minutes\n", Utc::now().to_rfc2822(), idle_min);
                 }
             }
             if !window.is_empty() {                
